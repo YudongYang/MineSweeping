@@ -3,34 +3,65 @@
  * Created by YuDong on 17-9-11.
  */
 var MineGame = function () {
+    // 返回的对象
     var obj = {};
     // 默认参数，以免出事
+    // 是否正在游戏中
     var isPlaying = false
-    var timeCounter = 120
+    // 游戏时间
+    var gameTime = 120
+    // 宽度
     var width = 9
+    // 高度
     var high = 9
+    // 雷数
     var mines = 9
 
-    // 啊，伟大的先知地图啊，实际上下面会初始哈u为二维数组的
+    // 啊，伟大的先知地图啊，也就是初始随机生成的雷图，实际上下面会初化为二维数组的
+    // 0 -> none ; 1 -> mine
     var map = []
 
+    // 说得文雅一点吧，行动轨迹图，就是记录哪些有点击过
+    // 0 -> not click ; 1 -> mouse_left ; 2 -> mouse_right
+    var clickMap = []
+    // 就是那张记录了左键点击应该显示什么数字的数组
+    // -1 -> mine ; 0 -> blank ; 1 - 9 -> number of mine
+    var mineMap = []
+    // 用来给页面显示的数组
+    // -1 -> flag ; 0 -> init ; 1 - 9 -> number
+    var viewMap = []
+
+    // 剩余未点击的格子的数量，加速
+    var unClickCounter = 0
+
     // 初始化
-    var init = function (size, timeCounter) {
+    var init = function (size, gameTime) {
         // 游戏参数
         this.width = size ? size : this.width
         this.high = size ? size : this.high
         this.mines = size ? size : this.mines
-        this.timeCounter = timeCounter ? timeCounter : this.timeCounter
+        this.gameTime = gameTime ? gameTime : this.gameTime
         // 游戏处于非游戏中
         this.isPlaying = false
         // 制作空白地图
         this.map = []
-        for (var i = 0 ; i< width ; i++) {
+        this.clickMap = []
+        this.mineMap = []
+        this.viewMap = []
+        for (var i = 0 ; i< this.width ; i++) {
             this.map[i] = []
-            for (var j = 0 ; j < high ; j++) {
+            this.clickMap[i] = []
+            this.mineMap[i] = []
+            this.viewMap[i] = []
+            for (var j = 0 ; j < this.high ; j++) {
                 this.map[i][j] = 0
+                this.clickMap[i][j] = 0
+                this.mineMap[i][j] = 0
+                this.viewMap[i][j] = 0
             }
         }
+        // 全部格子未点击
+        unClickCounter = this.width * this.high
     }
 
     // 干坏事，布雷
@@ -64,17 +95,46 @@ var MineGame = function () {
         }
     }
 
+    // 计算地雷数量的地图，没有采用原来的逐个计算的思路，先遍历 map 先知地图，如果有雷了，就将该格子周围的数字加一，提高一个数量级的速度
+    var calculateMap = function () {
+        for (var i = 0 ; i< this.width ; i++) {
+            for (var j = 0 ; j < this.high ; j++) {
+                if (this.map[i][j] === 1) {
+                    this.mineMap[i][j] = -1
+                    for (var x = i - 1 ; x < i + 1 ; x++) {
+                        for (var y = j - 1 ; y < j + 1 ; y++) {
+                            if (x >= 0 && x < this.width && y >= 0 && y < this.high) {
+                                if (this.map[x][y] === 0) {
+                                    this.mineMap[x][y] ++
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // 鼠标点击
+    // direction 的值为 1 || 'left' || 'L' 和 2 || 'right' || 'R' ， x 和 y 为坐标
+    var mouseClick = function (direction, x, y) {}
+
+    var mouseClickLeft = function (x, y) {}
+
+    var mouseClickRight = function (x, y) {}
+
     // 大哥，这里有地雷吗
     var isThisAMine  = function (x, y) {
         return this.map[x][y] === 1 ? true : false
     }
 
+    // 估计废弃了这个方法
     // 周围地雷的数量
     var numberOfMinesNearby = function (x, y) {
         var minesCount = 0
         for (var i = x - 1 ; i <= x + 1 ; i++) {
             for (var j = y - 1 ; j <= y + 1 ; j++) {
-                if (i >= 0 && i < this.width && y >=0 && y < this.high) {
+                if (i >= 0 && i < this.width && j >=0 && j < this.high) {
                     if (this.map[i][j] === 1) {
                         minesCount++
                     }
@@ -90,12 +150,12 @@ var MineGame = function () {
     }
 
     // 打印地图
-    var printMap = function () {
-        console.log(this.map)
+    var printMap = function (waittingPrintMap) {
+        console.log(waittingPrintMap)
         for (var i = 0 ; i < this.width ; i++) {
             var line = '';
             for (var j = 0 ; j < this.high ; j ++) {
-                line += String(this.map[i][j]);
+                line += String(waittingPrintMap[i][j]);
                 if (j < (this.high - 1)) {
                     line += '+';
                 }
@@ -112,8 +172,6 @@ var MineGame = function () {
     obj.printMap = printMap
 
     obj.isThisAMine = isThisAMine
-
-    obj.numberOfMinesNearby = numberOfMinesNearby
 
     // 返回 obj
     return obj;

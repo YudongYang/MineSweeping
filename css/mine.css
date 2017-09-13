@@ -1,0 +1,16 @@
+.mine-main-panel {
+	width: 1000px;
+	min-width: 1000px;
+	height: 900px;
+	min-height: 300px;
+	margin: 0 auto;
+	border: 1 solid #000;
+}
+
+.mine-panel-menu {
+	display: inline-block;
+}
+
+.mine-panel-play {
+	display: inline-block;
+}
