@@ -1,16 +1,60 @@
-.mine-main-panel {
-	width: 1000px;
-	min-width: 1000px;
-	height: 900px;
-	min-height: 300px;
+.mine-header-panel {
+	height: 55px;
+	min-height: 55px;
+	width: 1200px;
+	min-width: 1190px;
 	margin: 0 auto;
-	border: 1 solid #000;
+	text-align: center;
+}
+
+.mine-main-panel {
+	width: 1200px;
+	min-width: 1200px;
+	height: 500px;
+	min-height: 475px;
+	margin: 0 auto;
+	padding: 5px;
+	border: 1px solid #000;
+	position: relative;
+	top: 20px;
 }
 
 .mine-panel-menu {
+	width: 225px;
+	height: 475px;
+	margin: 5px 10px 5px 5px;
+	border: 1px solid #000;
 	display: inline-block;
 }
 
+.mine-panel-menu-body {
+	width: 95px;
+	height: 475px;
+	margin: 0;
+	border: none;
+	display: block;
+}
+
+.mine-menu-set-button {
+	margin: 0 auto;
+}
+
+.mine-menu-header {
+	width: 75px;
+}
+
 .mine-panel-play {
+	width: 900px;
+	height: 475px;
+	margin: 5px 5px 5px 5px;
+	border: 1px solid #000;
 	display: inline-block;
+}
+
+.mine-panel-play-body {
+	width: 900px;
+	height: 475px;
+	margin: 0;
+	border: none;
+	display: block;
 }
