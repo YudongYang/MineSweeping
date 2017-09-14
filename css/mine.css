@@ -5,12 +5,14 @@
 	min-width: 1190px;
 	margin: 0 auto;
 	text-align: center;
+    font-size: 25px;
+    font-weight: bold;
 }
 
 .mine-main-panel {
 	width: 1200px;
 	min-width: 1200px;
-	height: 500px;
+	height: 720px;
 	min-height: 475px;
 	margin: 0 auto;
 	padding: 5px;
@@ -21,15 +23,16 @@
 
 .mine-panel-menu {
 	width: 225px;
-	height: 475px;
+	height: 675px;
 	margin: 5px 10px 5px 5px;
 	border: 1px solid #000;
 	display: inline-block;
+    position: absolute;
 }
 
 .mine-panel-menu-body {
 	width: 95px;
-	height: 475px;
+	height: 675px;
 	margin: 0;
 	border: none;
 	display: block;
@@ -45,16 +48,92 @@
 
 .mine-panel-play {
 	width: 900px;
-	height: 475px;
+	height: 675px;
 	margin: 5px 5px 5px 5px;
 	border: 1px solid #000;
 	display: inline-block;
+    position: absolute;
+    left: 260px;
 }
 
 .mine-panel-play-body {
 	width: 900px;
-	height: 475px;
+	height: 675px;
 	margin: 0;
 	border: none;
 	display: block;
+}
+
+.mine-play-messageBox {
+    width: 80px;
+    border: 1px solid #ddd;
+    display: inline-block;
+}
+
+.mine-play-timeCounter {
+    height: 37px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.mine-play-mineCounter {
+    height: 37px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.mine-play-button {
+    height: 37px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 5px;
+}
+
+.mine-play-area {
+    height: 600px;
+    width: 600px;
+    display: inline-block;
+    position: absolute;
+    left: 110px;
+}
+
+.mine-play-mineArea {
+    width: 270px;
+    height: 270px;
+    border: 1px solid #ddd;
+    background-color: #ddd;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+.mine-play-block-base {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #eee;
+    background-color: #ddd;
+    display: inline-block;
+    /*position: absolute;*/
+}
+
+.mine-play-block-flag {
+    background-color: red;
+}
+
+.mine-play-block-blank {
+    background-color: #fff;
+}
+
+.mine-play-block-mine {
+    background-color: yellow;
 }
