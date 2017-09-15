@@ -29,11 +29,14 @@ var MineGame = function() {
     // -1 -> mine ; 0 -> blank ; 1 - 9 -> number of mine
     obj.mineMap = []
     // 用来给页面显示的数组
-    // -2 -> blank ; -1 -> flag ; 0 -> init ; 1 - 9 -> number
+    // -3-> mine ; -2 -> blank ; -1 -> flag ; 0 -> init ; 1 - 9 -> number
     obj.viewMap = []
 
     // 剩余未点击的格子的数量，加速
     obj.unClickCounter = 0
+
+    // 已经插旗的数量，记录一下，防止作弊
+    obj.markMines = 0
 
     // 计时器 clearInterval 的接收者
     obj.timeCounter = {}
@@ -50,10 +53,10 @@ var MineGame = function() {
     // 初始化
     obj.init = function(size, gameTime) {
         // 游戏参数
-        obj.width = obj.size ? obj.size : obj.width
-        obj.high = obj.size ? obj.size : obj.high
-        obj.mines = obj.size ? obj.size : obj.mines
-        obj.gameTime = obj.gameTime ? obj.gameTime : obj.gameTime
+        obj.width = size ? size : obj.width
+        obj.high = size ? size : obj.high
+        obj.mines = size ? size : obj.mines
+        obj.gameTime = gameTime ? gameTime : obj.gameTime
         // 游戏处于非游戏中
         obj.isPlaying = false
         // 重置计时器
@@ -84,6 +87,8 @@ var MineGame = function() {
         }
         // 全部格子未点击
         obj.unClickCounter = obj.width * obj.high
+        // 插旗记录
+        obj.markMines = 0
         // 自动配置
         if (!obj.settingMine()) {
             return false
@@ -126,7 +131,7 @@ var MineGame = function() {
         if (obj.unClickCounter === 0) {
             obj.isWin = true
             // 时间即得分
-            obj.score = Number(obj.flowTime / 100.00).toFixed(2)
+            obj.score = Number(obj.flowTime / 1000.00).toFixed(2)
         } else {
             obj.isWin = false
             obj.score = 0
@@ -158,7 +163,6 @@ var MineGame = function() {
             //
             console.log('In fact there are  : ' + mineCounter + ' mines.')
             console.log('But we want : ' + obj.mines + ' mines.')
-            printMap()
             return false
         } else {
             return true
@@ -188,7 +192,7 @@ var MineGame = function() {
 
     // 鼠标点击
     // direction 的值为 1 || 'left' || 'L' 和 2 || 'right' || 'R' ， x 和 y 为坐标
-    // 返回 -2 -> 未能识别的键位或者不在游戏中 -1 -> 不允许进行该键位点击了 0 -> 踩雷了 1-> 正常点击并做了相应处理 2 -> 达到胜利条件，赢了
+    // 返回 -2 -> 未能识别的键位或者不在游戏中 -1 -> 不允许进行该键位点击了（插旗数量超了是一种可能） 0 -> 踩雷了 1-> 正常点击并做了相应处理 2 -> 达到胜利条件，赢了
     obj.mouseClick = function(direction, x, y) {
         if (!obj.isPlaying) {
             return -2
@@ -205,6 +209,9 @@ var MineGame = function() {
             obj.stop()
             return 2
         }
+        if (result === 0) {
+            obj.stop()
+        }
         return result
     }
 
@@ -215,6 +222,12 @@ var MineGame = function() {
         }
         // 如果大哥告诉你这里有雷，那么游戏就结束了，因为是用左键点的
         if (obj.map[x][y] === 1) {
+            // 左键点击
+            obj.clickMap[x][y] = 1
+            // 未点击的格子数减少 1
+            obj.unClickCounter -= 1
+            // 给前端显示的 viewMap 变成 mineMap 中的数字，也就是这里有多少个雷
+            obj.viewMap[x][y] = -3
             return 0
         }
         if (obj.mineMap[x][y] !== 0) {
@@ -282,12 +295,18 @@ var MineGame = function() {
     obj.mouseClickRight = function(x, y) {
         // 如果 clickMap === 0 ，即没有点击过，直接做右键点击操作
         if (obj.clickMap[x][y] === 0) {
+            // 已经插旗的数量不能超过地雷的数量，要不怎么玩，哈哈
+            if (obj.markMines >= obj.mines) {
+                return -1
+            }
             // 右键点击
             obj.clickMap[x][y] = 2
             // 未点击的格子数减少 1 
             obj.unClickCounter -= 1
             // 给前端显示的 viewMap 变成 -1 ， 显示旗子
             obj.viewMap[x][y] = -1
+            // 插旗
+            obj.markMines += 1
             return 1
         }
         // 只有那些左键点击过的不允许右键点击
@@ -302,6 +321,8 @@ var MineGame = function() {
             obj.unClickCounter += 1
             // 给前端显示的 viewMap 变成 0 ， 显示初始化的样子
             obj.viewMap[x][y] = 0
+            // 拔旗
+            obj.markMines -= 1
             return 1
         }
     }

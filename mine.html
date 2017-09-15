@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="./css/bootstrap-theme.min.css">
     <link rel="stylesheet" type="text/css" href="./css/mine.css">
     <script src="./js/jquery-3.2.1.min.js"></script>
+    <script src="./js/cookie.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/vue.js"></script>
     <script src="./js/mine.js"></script>
@@ -14,73 +15,101 @@
 </head>
 
 <body>
-<div class="panel panel-default mine-header-panel">
-    <div class="panel-body">
-        Mine Sweeping
-    </div>
-</div>
-<div class="panel panel-default mine-main-panel">
-    <div class="panel-body">
-        <div class="panel panel-default mine-panel-menu" id="setting">
-            <div class="panel-heading">Setting</div>
-            <div class="panel-body mine-panel-menu-body">
-                <table class="table table-bordered">
-                    <tr>
-                        <td style="width: 30%;">Mines</td>
-                        <td style="width: 70%;">{{ minesShow }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><input type="number" name="mines" v-model="mines"></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 30%;">Time</td>
-                        <td style="width: 70%;">{{ timesShow }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><input type="number" name="times" v-model="times"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button type="button" class="btn btn-default mine-menu-set-button" @click="settingOnClick" v-if="settingButton">
-                                Set
-                            </button>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+    <div class="panel panel-default mine-header-panel">
+        <div class="panel-body">
+            Mine Sweeping
         </div>
-        <div class="panel panel-default mine-panel-play">
-            <div class="panel-heading">Playing Area</div>
-            <div class="panel-body mine-panel-play-body">
-                <div class="mine-play-messageBox" id="opr">
-                    <div class="mine-play-timeCounter">{{ formatTime }}</div>
-                    <div class="mine-play-mineCounter">{{ mines }}</div>
-                    <div class="mine-play-button">
-                        <button type="button" class="btn btn-default mine-menu-set-button" @click="oprButtonOnClick">
-                            <div v-if="buttonToBegin">
-                                Begin
-                            </div>
-                            <div v-if="!buttonToBegin">
-                                Stop
-                            </div>
-                        </button>
-                    </div>
+    </div>
+    <div class="panel panel-default mine-main-panel">
+        <div class="panel-body">
+            <div class="panel panel-default mine-panel-menu" id="setting">
+                <div class="panel-heading">Setting</div>
+                <div class="panel-body mine-panel-menu-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td style="width: 30%;">Mines</td>
+                            <td style="width: 70%;">{{ minesShow }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input class="form-control mine-menu-input" type="number" name="mines" v-model="mines">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 30%;">Time</td>
+                            <td style="width: 70%;">{{ timesShow }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input class="form-control mine-menu-input" type="number" name="times" v-model="times">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button type="button" class="btn btn-default mine-menu-set-button" @click="settingOnClick" v-if="settingButton">
+                                    Set
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-                <div class="mine-play-area">
-                    <div class="mine-play-mineArea">
+            </div>
+            <div class="panel panel-default mine-panel-play">
+                <div class="panel-heading">Playing Area</div>
+                <div class="panel-body mine-panel-play-body">
+                    <div class="mine-play-messageBox" id="opr">
+                        <div class="mine-play-timeCounter">{{ formatTime }}</div>
+                        <div class="mine-play-mineCounter">{{ minesShow }}</div>
+                        <div class="mine-play-button">
+                            <button type="button" class="btn btn-default mine-play-button-btn" @click="oprButtonOnClick">
+                                <div v-if="buttonToBegin">
+                                    Begin
+                                </div>
+                                <div v-if="!buttonToBegin">
+                                    Stop
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mine-play-area" id="play" oncontextmenu="return false" :style="{ width: mines * 30 + 'px', height: mines * 30 + 'px'}">
+                        <div class="mine-play-mineArea">
+                            <div class="mine-play-mineArea-line" v-for="(line, x) in viewMap">
+                                <div class="mine-play-block-block" v-for="(block, y) in line">
+                                    <div class="mine-play-block-base mine-play-block-mine" :style="{ left: y * 30 + 'px' }" v-if="block === -3" @click="blockOnClick(x, y, 1)" @contextmenu="blockOnClick(x, y, 2)"></div>
+                                    <div class="mine-play-block-base mine-play-block-blank" :style="{ left: y * 30 + 'px' }" v-else-if="block === -2" @click="blockOnClick(x, y, 1)" @contextmenu="blockOnClick(x, y, 2)"></div>
+                                    <div class="mine-play-block-base mine-play-block-flag" :style="{ left: y * 30 + 'px' }" v-else-if="block === -1" @click="blockOnClick(x, y, 1)" @contextmenu="blockOnClick(x, y, 2)"></div>
+                                    <div class="mine-play-block-base" :style="{ left: y * 30 + 'px' }" v-else-if="block === 0" @click="blockOnClick(x, y, 1)" @contextmenu="blockOnClick(x, y, 2)"></div>
+                                    <div class="mine-play-block-base mine-play-block-blank" :style="{ left: y * 30 + 'px' }" v-else @click="blockOnClick(x, y, 1)" @contextmenu="blockOnClick(x, y, 2)">{{ block }}</div>
+                                </div>
+                            </div>
+                            <!-- 
                         <div class="mine-play-block-base"></div>
                         <div class="mine-play-block-base"></div>
                         <div class="mine-play-block-base mine-play-block-mine"></div>
                         <div class="mine-play-block-base mine-play-block-flag"></div>
                         <div class="mine-play-block-base mine-play-block-blank"></div>
+                        -->
+                        </div>
+                        <div class="mine-play-stop-message mine-play-stop-message-show" :style="{ width: mines * 30 + 'px', height: mines * 30 + 'px'}" v-if="gameMsgCouldShow && !isPlaying && !win">
+                            <div class="mine-play-stop-message-msg">
+                                <span>OOOOOOOOOPS...</span>
+                                <br>
+                                <span>LOSE~</span>
+                            </div>
+                        </div>
+                        <div class="mine-play-win-message mine-play-win-message-show" :style="{ width: mines * 30 + 'px', height: mines * 30 + 'px'}" v-if="gameMsgCouldShow && !isPlaying && win">
+                            <div class="mine-play-win-message-msg">
+                                <span>YOU WIN!</span>
+                                <br>
+                                <span>Time : {{ score }} s</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<script src="./js/mineVUE.js"></script>
+    <script src="./js/mineVUE.js"></script>
 </body>
 
 </html>
