@@ -10,18 +10,35 @@ var RDS_HOST = '127.0.0.1'
 // Setting Options, such as password : auth_pass:RDS_PWD
 var RDS_OPTS = {}
 
+var keys = function (key, callback) {
+    client = redis.createClient(RDS_PORT,RDS_HOST,RDS_OPTS)
+    client.keys(key, function(param, success){
+        client.quit()
+        callback ? callback(success) : null
+    })
+}
+
+var del = function (key, callback) {
+    client = redis.createClient(RDS_PORT,RDS_HOST,RDS_OPTS)
+    client.keys(key, function(param, success){
+        client.quit()
+        callback ? callback(success === 'OK' ? true : false) : null
+    })
+}
+
 var set = function (key, value, callback) {
     client = redis.createClient(RDS_PORT,RDS_HOST,RDS_OPTS)
     client.set(key, value, function(param, success){
         client.quit()
-        callback(success === 'OK' ? true : false)
+        callback ? callback(success === 'OK' ? true : false) : null
     })
 }
+
 var get = function (key, callback) {
     client = redis.createClient(RDS_PORT,RDS_HOST,RDS_OPTS)
     client.get(key, function(param, success){
         client.quit()
-        callback(success)
+        callback ? callback(success) : null
     })
 }
 
@@ -29,7 +46,7 @@ var hmset = function (hkey, key, value, callback) {
     client = redis.createClient(RDS_PORT,RDS_HOST,RDS_OPTS)
     client.hmset(hkey, key, value, function(param, success) {
         client.quit()
-        callback(success === 'OK' ? true : false)
+        callback ? callback(success === 'OK' ? true : false) : null
     })
 }
 
@@ -37,11 +54,13 @@ var hmget = function (hkey, key, callback) {
     client = redis.createClient(RDS_PORT,RDS_HOST,RDS_OPTS)
     client.hmget(hkey, key, function(param, success) {
         client.quit()
-        callback(success)
+        callback ? callback(success) : null
     })
 }
 
 var obj = {}
+
+obj.keys = keys
 
 obj.set = set
 

@@ -10,6 +10,7 @@
     <script src="./js/cookie.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/vue.js"></script>
+    <script src="./js/axios.min.js"></script>
     <script src="./js/mine.js"></script>
     <title>Mine Sweeping</title>
 </head>
@@ -64,6 +65,19 @@
                             </td>
                         </tr>
                     </table>
+                    <!-- 排行榜 -->
+                    <div class="mine-panel-menu-rank">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                Rank
+                            </li>
+                            <li class="list-group-item" v-for="(obj, i) in rank" v-if="i < 5">
+                                <span class="badge">{{ i + 1 }}</span>
+                                <span class="badge">{{ obj.score[0] }} s</span>
+                                {{ obj.name[0] }}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <!-- 游戏面板 -->

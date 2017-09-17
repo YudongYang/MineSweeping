@@ -55,6 +55,10 @@ bus.$on('clickTheMine', function() {
 
 // 赢了
 bus.$on('winTheGame', function() {
+    uploadScore()
+    setTimeout(function () {
+        settingVUE.updateRank()
+    }, 1000)
     oprVUE.stop()
 })
 
@@ -79,11 +83,17 @@ var settingVUE = new Vue({
     data: {
         mines: mines,
         times: times,
-        name: names,
+        name: name,
         minesShow: mines,
         timesShow: times,
-        nameShow: names,
-        settingButton: true
+        nameShow: name,
+        settingButton: true,
+        rank: null
+    },
+    mounted: function () {
+        this.$nextTick(() => {
+            this.updateRank()
+        })
     },
     methods: {
         // 保存按钮
@@ -106,6 +116,14 @@ var settingVUE = new Vue({
         // 开始按钮点了之后，设置按钮应该隐藏
         clickBegin: function(buttonToBegin) {
             this.settingButton = buttonToBegin
+        },
+        updateRank: function() {
+            getList((rankList) => {
+                if (rankList) {
+                    this.rank = []
+                    this.rank = rankList
+                }
+            })
         }
     }
 })
@@ -250,5 +268,32 @@ var playVUE = new Vue({
 })
 
 var uploadScore = function () {
+    axios.create({
+        headers: {'Content-Type': 'application/json'},
+    }).post('/services/add', {
+            name: name,
+            level: mines,
+            score: mineGame.score
+    })
+        .then(function (response) {
+            console.log(response)
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
+}
 
+var getList = function(callback) {
+    axios.get('/services/list', {
+        params: {
+            level: mines
+        }})
+        .then(function (response) {
+            console.log(response)
+            callback(response['data']['data'])
+        })
+        .catch(function (error) {
+            console.log(error)
+            callback(false)
+        });
 }

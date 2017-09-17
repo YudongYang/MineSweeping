@@ -47,6 +47,10 @@
     display: block;
 }
 
+.mine-panel-menu-rank {
+    width: 190px;
+}
+
 /* 输入框 */
 .mine-menu-input {
     width: 174px;
