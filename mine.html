@@ -11,21 +11,33 @@
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/vue.js"></script>
     <script src="./js/mine.js"></script>
-    <title>Mine</title>
+    <title>Mine Sweeping</title>
 </head>
 
 <body>
+    <!-- 页面头 -->
     <div class="panel panel-default mine-header-panel">
         <div class="panel-body">
             Mine Sweeping
         </div>
     </div>
+    <!-- 内容主体 -->
     <div class="panel panel-default mine-main-panel">
         <div class="panel-body">
+            <!-- 设置面板 -->
             <div class="panel panel-default mine-panel-menu" id="setting">
                 <div class="panel-heading">Setting</div>
                 <div class="panel-body mine-panel-menu-body">
                     <table class="table table-bordered">
+                        <tr>
+                            <td style="width: 30%;">name</td>
+                            <td style="width: 70%;">{{ nameShow }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input class="form-control mine-menu-input" type="text" name="mines" v-model="name">
+                            </td>
+                        </tr>
                         <tr>
                             <td style="width: 30%;">Mines</td>
                             <td style="width: 70%;">{{ minesShow }}</td>
@@ -54,8 +66,10 @@
                     </table>
                 </div>
             </div>
+            <!-- 游戏面板 -->
             <div class="panel panel-default mine-panel-play">
                 <div class="panel-heading">Playing Area</div>
+                <!-- 游戏进度信息 -->
                 <div class="panel-body mine-panel-play-body">
                     <div class="mine-play-messageBox" id="opr">
                         <div class="mine-play-timeCounter">{{ formatTime }}</div>
@@ -71,6 +85,9 @@
                             </button>
                         </div>
                     </div>
+                    <!-- 游戏操作区域 -->
+                    <!-- 以下内容为动态生成 -->
+                    <!-- 采用绝对定位将每个格子贴上去 -->
                     <div class="mine-play-area" id="play" oncontextmenu="return false" :style="{ width: mines * 30 + 'px', height: mines * 30 + 'px'}">
                         <div class="mine-play-mineArea">
                             <div class="mine-play-mineArea-line" v-for="(line, x) in viewMap">
@@ -83,13 +100,14 @@
                                 </div>
                             </div>
                             <!-- 
+                        <div class="mine-play-block-base">游戏格子的基础样式</div>
                         <div class="mine-play-block-base"></div>
-                        <div class="mine-play-block-base"></div>
-                        <div class="mine-play-block-base mine-play-block-mine"></div>
-                        <div class="mine-play-block-base mine-play-block-flag"></div>
-                        <div class="mine-play-block-base mine-play-block-blank"></div>
+                        <div class="mine-play-block-base mine-play-block-mine">踩雷的样式</div>
+                        <div class="mine-play-block-base mine-play-block-flag">插旗子的样式</div>
+                        <div class="mine-play-block-base mine-play-block-blank">点开空白的样式</div>
                         -->
                         </div>
+                        <!-- 失败时操作区域上面的弹层提示信息 -->
                         <div class="mine-play-stop-message mine-play-stop-message-show" :style="{ width: mines * 30 + 'px', height: mines * 30 + 'px'}" v-if="gameMsgCouldShow && !isPlaying && !win">
                             <div class="mine-play-stop-message-msg">
                                 <span>OOOOOOOOOPS...</span>
@@ -97,6 +115,7 @@
                                 <span>LOSE~</span>
                             </div>
                         </div>
+                        <!-- 赢了的时候的弹层提示信息 -->
                         <div class="mine-play-win-message mine-play-win-message-show" :style="{ width: mines * 30 + 'px', height: mines * 30 + 'px'}" v-if="gameMsgCouldShow && !isPlaying && win">
                             <div class="mine-play-win-message-msg">
                                 <span>YOU WIN!</span>

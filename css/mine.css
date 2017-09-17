@@ -1,3 +1,9 @@
+/**
+ * Created by YuDong on 17-9-15.
+   游戏的样式集，嗯嗯，果然没有参考都不知道怎么写比较好看了
+ */
+
+/* 页面头，固定大小 */
 .mine-header-panel {
     height: 55px;
     min-height: 55px;
@@ -9,6 +15,7 @@
     font-weight: bold;
 }
 
+/* 内容主面板，固定大小 */
 .mine-main-panel {
     width: 1200px;
     min-width: 1200px;
@@ -21,6 +28,7 @@
     top: 20px;
 }
 
+/* 菜单面板 */
 .mine-panel-menu {
     width: 225px;
     height: 675px;
@@ -30,6 +38,7 @@
     position: absolute;
 }
 
+/* 菜单内容 */
 .mine-panel-menu-body {
     width: 95px;
     height: 675px;
@@ -38,18 +47,22 @@
     display: block;
 }
 
+/* 输入框 */
 .mine-menu-input {
     width: 174px;
 }
 
+/* setting 按钮 */
 .mine-menu-set-button {
     margin: 0 auto;
 }
 
+/* 固定大小 */
 .mine-menu-header {
     width: 75px;
 }
 
+/* 游戏面板，流式块 */
 .mine-panel-play {
     width: 900px;
     height: 675px;
@@ -60,6 +73,7 @@
     left: 260px;
 }
 
+/* 游戏操作区域 */
 .mine-panel-play-body {
     width: 900px;
     height: 675px;
@@ -68,12 +82,14 @@
     display: block;
 }
 
+/* 游戏进度信息，固定大小，流式块 */
 .mine-play-messageBox {
     width: 80px;
     border: 1px solid #ddd;
     display: inline-block;
 }
 
+/* 计时器 */
 .mine-play-timeCounter {
     height: 37px;
     font-size: 20px;
@@ -84,16 +100,18 @@
     border-bottom: 1px solid #ddd;
 }
 
+/* 计雷器 */
 .mine-play-mineCounter {
-    height: 37px;
+    height: 51px; /* bootstrap 把旁边的输入框撑大了，但是好像这个比时间还要重要一点，干脆变大一点 */
     font-size: 20px;
     font-weight: bold;
     text-align: center;
     vertical-align: middle;
-    padding-top: 5px;
+    padding-top: 13px;
     border-bottom: 1px solid #ddd;
 }
 
+/* 开始 || 结束按钮 */
 .mine-play-button {
     height: 37px;
     font-size: 20px;
@@ -102,11 +120,13 @@
     vertical-align: middle;
 }
 
+
 .mine-play-button-btn {
     width: 78px;
     height: 37px;
 }
 
+/* 游戏区域，流式块 */
 .mine-play-area {
     height: 600px;
     width: 600px;
@@ -115,45 +135,52 @@
     left: 110px;
 }
 
+/* 游戏操作区域，流式块 */
 .mine-play-mineArea {
     width: 270px;
     height: 270px;
-    z-index: 1000;
+    z-index: 1000; /* 弹高一点，但是不能比信息结果信息提示面板高 */
     background-color: #ddd;
     position: absolute;
     left: 0px;
     top: 0px;
 }
 
+/* 游戏操作区域每行固定高度 */
 .mine-play-mineArea-line {
     height: 30px;
 }
 
+/* 游戏格子基础样式 */
 .mine-play-block-base {
     width: 30px;
     height: 30px;
-    border: 1px solid #eee;
+    border: 1px solid #eee; /* 边框颜色介于底部面板的 #fff 和 格子的 #ddd ，层次感出来 */
     font-size: 20px;
     font-weight: bold;
     text-align: center;
-    background-color: #ddd;
+    background-color: #ddd; /* 游戏中背景色基色 */
     display: inline-block;
     position: absolute;
-    /* 为了看效果注释掉了，一定记得放开 */
+    /* 为了看效果注释掉了，一定记得放开，上面那行对布局很重要 */
 }
 
+/* 插了小旗子就是 red */
 .mine-play-block-flag {
     background-color: red;
 }
 
+/* 点开之后的空白区域是 #fff  */
 .mine-play-block-blank {
     background-color: #fff;
 }
 
+/* 踩雷了就是 yellow */
 .mine-play-block-mine {
     background-color: yellow;
 }
 
+/* 虽然叫 stop ，其实是显示失败信息的 */
 .mine-play-stop-message {
     top: 0px;
     left: 0px;
@@ -163,9 +190,10 @@
     margin: 0 auto;
     position: absolute;
     /* 如果没有，浮不起来 */
-    background-color: rgba(255, 255, 0, 0.375);
+    background-color: rgba(255, 255, 0, 0.375); /* rgba 不会被子元素继承，以免影响提示信息的显示 */
 }
 
+/* 显示胜利信息的 */
 .mine-play-win-message {
     top: 0px;
     left: 0px;
@@ -175,17 +203,20 @@
     margin: 0 auto;
     position: absolute;
     /* 如果没有，浮不起来 */
-    background-color: rgba(0, 255, 0, 0.375);
+    background-color: rgba(0, 255, 0, 0.375); /* 就颜色不一样而已 */
 }
 
+/* 那个渐变显示底层颜色的动画 */
 .mine-play-stop-message-show {
     animation: mine-play-message-stop 3s;
 }
 
+/* 显示底层渐变的颜色的动画 */
 .mine-play-win-message-show {
     animation: mine-play-message-win 3s;
 }
 
+/* 虽然叫 stop ，其实都是用于提示信息显示的那个框 */
 .mine-play-stop-message-msg {
     width: 220px;
     height: 58px;
@@ -204,6 +235,7 @@
     background-color: #ddd;
 }
 
+/* 赢了的提示信息那个框 */
 .mine-play-win-message-msg {
     width: 220px;
     height: 58px;
@@ -222,6 +254,7 @@
     background-color: #ddd;
 }
 
+/* 黄色小动画 */
 @keyframes mine-play-message-stop {
     0% {
         background-color: rgba(255, 255, 0, 0);
@@ -231,6 +264,7 @@
     }
 }
 
+/* 绿色小动画 */
 @keyframes mine-play-message-win {
     0% {
         background-color: rgba(0, 255, 0, 0);

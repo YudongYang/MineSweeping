@@ -409,6 +409,8 @@ var MineGame = function() {
 }
 
 /*
+测试用
+先在后台分别对每个方法进行单元测试，这样我写页面的时候就不用考虑后台了
 测试前先把代码中的 map 改成用 testMap
 var mineGame = MineGame()
 mineGame.init(9, 120)
