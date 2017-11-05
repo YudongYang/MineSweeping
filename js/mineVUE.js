@@ -55,7 +55,7 @@ bus.$on('clickTheMine', function() {
 
 // 赢了
 bus.$on('winTheGame', function() {
-    uploadScore()
+    // uploadScore()
     setTimeout(function () {
         settingVUE.updateRank()
     }, 1000)
@@ -92,7 +92,7 @@ var settingVUE = new Vue({
     },
     mounted: function () {
         this.$nextTick(() => {
-            this.updateRank()
+            // this.updateRank()
         })
     },
     methods: {
