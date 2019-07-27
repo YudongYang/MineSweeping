@@ -48,4 +48,4 @@ https://yudongyang.github.io/MineSweeping/mine.html
 
 Normal MAZE:
 
-http://maze.yudong.xyz/
+https://github.com/YudongYang/maze
